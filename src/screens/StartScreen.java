@@ -18,12 +18,16 @@ public class StartScreen {
 		    Label game_title,player1,player2,name1,name2;
 		    
 		    game_title = new Label("Quizzo...");
-		    game_title.setBounds(screenSize.width/2 - 150 , 100 , 300, 200);
+			
+			
+			game_title.setBounds(screenSize.width/2 - 150 , 100 , 300, 200);
 		    game_title.setFont(new Font("DpQuake", Font.BOLD,75));
 		    frame.add(game_title);
 		   
 		    player1 = new Label("Player 1");
-		    player1.setBounds((screenSize.width*1)/8, (screenSize.height *2)/5, 80, 40);
+			
+			
+			player1.setBounds((screenSize.width*1)/8, (screenSize.height *2)/5, 80, 40);
 		    frame.add(player1);
 		   
 		    
