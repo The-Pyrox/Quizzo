@@ -15,6 +15,9 @@ public class QuizScreen extends Frame {
 	DatabaseConnector d = new DatabaseConnector();
 	User[] users = new User[2];
 	
+	int p1_score,p2_score,count;
+	Integer[] q_id = new Integer[7];
+	
 	QuizScreen(){
 		this.users = d.getUsers();
 		prepareGUI();

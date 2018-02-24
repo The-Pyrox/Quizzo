@@ -51,8 +51,7 @@ public class DatabaseConnector {
 			stmt = con.createStatement();
 			ResultSet rs=stmt.executeQuery("SELECT * FROM user_info ORDER BY ID DESC LIMIT 2");
 			while(rs.next()) {
-				users[i] = new User();
-				System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "); 
+				users[i] = new User(); 
 				users[i].setId(rs.getInt(1));
 				users[i].setName(rs.getString(2));
 				i--;
