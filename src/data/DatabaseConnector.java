@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import classes.Question;
 import classes.User;
 
 public class DatabaseConnector {
@@ -57,12 +58,35 @@ public class DatabaseConnector {
 				i--;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 		
 		
 		return users;
+	}
+	
+	public Question getQuestion(String severity) {
+		Question question = new Question();
+		
+		try {
+			String query = "SELECT q.ID,q.question,o.option1,o.option2,o.option3,o.option4,c.correct_option FROM question q,option o,correct_option c WHERE q.ID = o.question_ID AND o.ID = c.option_ID AND upper(q.severity) = '"+ severity+"'";
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()){
+				question.setQuestion_ID(rs.getString("ID"));
+				question.setQuestion(rs.getString("question"));
+				question.setOption1(rs.getString("option1"));
+				question.setOption2(rs.getString("option2"));
+				question.setOption3(rs.getString("option3"));
+				question.setOption4(rs.getString("option4"));
+				question.setCoorectOption(rs.getString(rs.getString("correct_option")));
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return question;
 	}
 	
 	

@@ -1,6 +1,8 @@
 package screens;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
@@ -9,6 +11,7 @@ import java.sql.*;
 import javax.swing.*;
 
 import data.DatabaseConnector;
+import ui.CountDownProgressBar;
 
 public class StartScreen extends Frame implements MouseListener{
 	
@@ -21,20 +24,24 @@ public class StartScreen extends Frame implements MouseListener{
     
     String[] users = new String[2];
     
+    Timer timer ;
+    
     
 	  StartScreen(){
 		  
 		  prepareGUI();
+		  SwingUtilities.invokeLater( new Runnable() {
+	            public void run() {
+	            		initProgressBar();
+	            	 
+	        }
+	        });
 		    
 		  }
 	  
 
 		  public static void main(String args[]){
 		    StartScreen f = new StartScreen();
-		    
-		    //d = new DatabaseConnector();
-		    
-		 
 		  }
 		  
 		  
@@ -53,6 +60,11 @@ public class StartScreen extends Frame implements MouseListener{
 			 
 			    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			    this.setSize(screenSize.width,screenSize.height);
+			    
+
+			   
+			    
+			   
 			     
 			    
 			    
@@ -154,4 +166,34 @@ public class StartScreen extends Frame implements MouseListener{
 			// TODO Auto-generated method stub
 			
 		}
+		
+		public void initProgressBar() {
+			 JProgressBar progressBar;
+           	
+           	
+           	 progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 10);
+           	 progressBar.setBounds(400, 400, 900, 5);
+                progressBar.setValue(10);
+                progressBar.setVisible(true);
+                ActionListener listener = new ActionListener() {
+                    int counter = 10;
+        			@Override
+        			public void actionPerformed(ActionEvent e) {
+        				counter--;
+                     progressBar.setValue(counter);
+                     if (counter<1) {
+                    	 	JOptionPane.showMessageDialog(null, "Kaboom!");
+                         timer.stop();
+                     } 
+        				
+        			}
+                };
+                timer = new Timer(1000, listener);
+                timer.start();
+                this.add(progressBar);
+		}
+		
+		
+		
+		
 }
