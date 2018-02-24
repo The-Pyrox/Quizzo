@@ -3,8 +3,12 @@ package screens;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.*;
+
 
 import javax.swing.*;
+
+import data.DatabaseConnector;
 
 public class StartScreen extends Frame implements MouseListener{
 	
@@ -12,6 +16,10 @@ public class StartScreen extends Frame implements MouseListener{
     JTextField p1_name,p2_name;
     JButton p1_ready,p2_ready,start;
     Boolean isp1 = false,isp2 = false;
+    
+    DatabaseConnector d = new DatabaseConnector();
+    
+    String[] users = new String[2];
     
     
 	  StartScreen(){
@@ -23,12 +31,20 @@ public class StartScreen extends Frame implements MouseListener{
 
 		  public static void main(String args[]){
 		    StartScreen f = new StartScreen();
+		    
+		    //d = new DatabaseConnector();
+		    
+		 
 		  }
 		  
 		  
 		  private void checkstart() {
 			  if(isp1 && isp2) {
-				  start.setVisible(true);
+				 users[0] = p1_name.getText();
+				 users[1] = p2_name.getText();
+				 d.addUser(users);
+				 start.setVisible(true);
+				  
 			  }
 		  }
 		  

@@ -1,33 +1,52 @@
 package screens;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import java.awt.*;
 
-public class QuizScreen {
+import javax.swing.*;
+
+import classes.User;
+import data.DatabaseConnector;
+
+public class QuizScreen extends Frame {
 	
-	JFrame frame = new JFrame();
+	JLabel p1_name,p2_name;
+	
+	DatabaseConnector d = new DatabaseConnector();
+	User[] users = new User[2];
 	
 	QuizScreen(){
+		this.users = d.getUsers();
+		prepareGUI();
+		
+		
+		
+	   
+	}
+	
+	private void prepareGUI() {
 		JLabel hello;
 		hello = new JLabel("Hello");
+		this.add(hello);
 		
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	    frame.setSize(screenSize.width,screenSize.height);
-	     
+	    this.setSize(screenSize.width,screenSize.height);
 	    
+	    p1_name = new JLabel(users[0].getName());
+	    p1_name.setBounds((screenSize.width*1)/8 - 40, (screenSize.height *1)/5, 200, 40);
+	    this.add(p1_name);
+	    
+	    p2_name = new JLabel(users[1].getName());
+	    p2_name.setBounds((screenSize.width*7)/8 - 100, (screenSize.height *1)/5, 200, 40);
+	    this.add(p2_name);
 	    
 	    
 	    hello.setBounds(screenSize.width/2 - 150 , 100 , 300, 200);
 	    hello.setFont(new Font("DpQuake", Font.BOLD,75));
-	    frame.add(hello);
-	    frame.setLayout(null);
-	    frame.setVisible(true);
-	   
+	    
+	    this.setLayout(null);
+	    this.setVisible(true);
 	}
 	
 	
