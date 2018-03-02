@@ -2,8 +2,11 @@ package screens;
 
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -13,35 +16,48 @@ import data.DatabaseConnector;
 
 public class QuizScreen extends Frame implements KeyListener {
 	
-	JLabel p1_name,p2_name,questionLabel;
-	
+	JLabel p1_name,p2_name,questionLabel,p1_labelscore,p2_labelscore;
 	DatabaseConnector d = new DatabaseConnector();
 	User[] users = new User[2];
-	
-	int p1_score,p2_score,count;
-	Integer[] q_id = new Integer[7];
-	
-	JButton option1,option2,option3,option4;
-	
+	int p1_score = 0,p2_score = 0;
+	Boolean p1_ready = false,p2_ready = false;
+	ArrayList<Integer> q_id = new ArrayList();
+ 	JButton option1,option2,option3,option4;
+	JProgressBar p1_bar,p2_bar,progressBar;
 	Question question;
-	
+	String severity = "LOW";
+	int counter = 10;
+	ActionListener listener;
+	Timer timer ;
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    
 	QuizScreen(){
 		this.users = d.getUsers();
 		prepareGUI();
-		
-		question = d.getQuestion("LOW");
-		setQuestion();
-		
+		startgame();
 	}
 	
 	private void prepareGUI() {
-		JLabel hello;
-		hello = new JLabel("Hello");
-		this.add(hello);
 		
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	    this.setSize(screenSize.width,screenSize.height);
+		this.setSize(screenSize.width,screenSize.height);
+	    
+	    p1_bar = new JProgressBar(JProgressBar.VERTICAL, 0, 200);
+	    p1_bar.setBounds((screenSize.width*1)/8 - 80, (screenSize.height *4)/5 - 600, 5, 600);
+	    p1_bar.setValue(0);
+	    this.add(p1_bar);
+         
+        p2_bar = new JProgressBar(JProgressBar.VERTICAL, 0, 200);
+	    p2_bar.setBounds((screenSize.width*7)/8 - 80, (screenSize.height *4)/5 - 600, 5, 600);
+	    p2_bar.setValue(0);
+	    this.add(p2_bar);
+	    
+	    p1_labelscore = new JLabel("0");
+	    p1_labelscore.setBounds((screenSize.width*1)/8 -80, (screenSize.height *4)/5 - 200, 100, 40);
+	    this.add(p1_labelscore);
+	    
+	    p2_labelscore = new JLabel("0");
+	    p2_labelscore.setBounds((screenSize.width*7)/8 -80, (screenSize.height *4)/5 - 200, 100, 40);
+	    this.add(p2_labelscore);
 	    
 	    p1_name = new JLabel(users[0].getName());
 	    p1_name.setBounds((screenSize.width*1)/8 - 40, (screenSize.height *1)/5, 200, 40);
@@ -71,13 +87,30 @@ public class QuizScreen extends Frame implements KeyListener {
 	    option4.setBounds((screenSize.width*3)/5, (screenSize.height *4)/5, 100, 40);
 	    this.add(option4);
 	    
+	    progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 10);
+     	progressBar.setBounds(100, 100, 900, 5);
+     	
+     	timer = new Timer(1000, listener);
+        
+     	listener = new ActionListener() {
+            
+  			@Override
+  			public void actionPerformed(ActionEvent e) {
+  				counter--;
+               progressBar.setValue(counter);
+               if (counter<1) {
+              	 	JOptionPane.showMessageDialog(null, "No one couldnt answer the question.");
+              	 	p1_ready = true;
+              	 	p2_ready = true;
+              	 	checkready();
+               } 
+  				
+  			}
+          };
+       
+        this.addKeyListener(this);
 	    
-	    
-	    
-	    hello.setBounds(screenSize.width/2 - 150 , 100 , 300, 200);
-	    hello.setFont(new Font("DpQuake", Font.BOLD,75));
-	    
-	    this.setLayout(null);
+        this.setLayout(null);
 	    this.setVisible(true);
 	}
 	
@@ -92,39 +125,122 @@ public class QuizScreen extends Frame implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		switch(e.getKeyChar()) {
+		int multiplier ;
+		if(severity.equals("LOW")) {
+			multiplier = 2;
+		}else if(severity.equals("MID")) {
+			multiplier = 4;
+		}else {
+			multiplier = 6;
+		}
+		if(e.getKeyChar() == 'q' || e.getKeyChar() == 'w' || e.getKeyChar() == 'e' || e.getKeyChar() == 'r') {
+			switch(e.getKeyChar()) {
 			case 'q':
+				if(question.getCorrectOption().equals(question.getOption1())) {
+					p1_score = p1_score + counter*multiplier;
+				}
 				break;
 			case 'w':
+				if(question.getCorrectOption().equals(question.getOption2())) {
+					p1_score = p1_score + counter*multiplier;
+				}
 				break;
 			case 'e':
+				if(question.getCorrectOption().equals(question.getOption3())) {
+					p1_score = p1_score + counter*multiplier;
+				}
 				break;
 			case 'r':
+				if(question.getCorrectOption().equals(question.getOption4())) {
+					p1_score = p1_score + counter*multiplier;
+				}
 				break;
+			default :
+			}
+			
+			p1_bar.setValue(p1_score);
+			p1_ready = true;
+			p1_labelscore.setText(String.valueOf(p1_score));
+			checkready();
+		}else if(e.getKeyChar() == 'v' || e.getKeyChar() == 'b' || e.getKeyChar() == 'n' || e.getKeyChar() == 'm') {
+			switch(e.getKeyChar()) {
 			case 'v':
+				if(question.getCorrectOption().equals(question.getOption1())) {
+					p2_score = p2_score + counter*multiplier;
+				}
 				break;
 			case 'b':
+				if(question.getCorrectOption().equals(question.getOption2())) {
+					p2_score = p2_score + counter*multiplier;
+				}
 				break;
 			case 'n':
+				if(question.getCorrectOption().equals(question.getOption3())) {
+					p2_score = p2_score + counter*multiplier;
+				}
 				break;
 			case 'm':
+				if(question.getCorrectOption().equals(question.getOption4())) {
+					p2_score = p2_score + counter*multiplier;
+				}
 				break;
 			default:
 				
+			}
+			
+			p2_bar.setValue(p2_score);
+			p2_ready = true;
+			p2_labelscore.setText(String.valueOf(p2_score));
+			checkready();
 		}
-		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+	}
+	
+	public void startgame() {
+		question = d.getQuestion(severity,q_id);
+		setQuestion();
+		initProgressBar();
+	}
+	
+	public void initProgressBar() {
+		progressBar.setValue(10);
+        progressBar.setVisible(true);
+        counter = 10;
+        timer.addActionListener(listener);
+        timer.restart();
+        this.add(progressBar);
+	}
+	
+	public void checkready() {
 		
+		if(p1_ready && p2_ready) {
+			p1_ready = false;
+			p2_ready = false;
+			q_id.add(Integer.valueOf(question.getQuestionId()));
+			if(q_id.size() == 3) {
+				severity = "MID";
+			}else if(q_id.size() == 5) {
+				severity = "HIGH";
+			}
+			timer.stop();
+			timer.removeActionListener(listener);
+			if(q_id.size() == 6) {
+				users[0].setScore(p1_score);
+				users[1].setScore(p2_score);
+				d.setResults(users);
+				this.dispose();
+				ResultScreen r = new ResultScreen();			
+			}else {
+				startgame();
+			}
+		}
 	}
 	
 	
