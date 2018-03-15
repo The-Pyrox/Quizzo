@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 import classes.Question;
 import classes.User;
@@ -30,6 +31,7 @@ public class QuizScreen extends Frame implements KeyListener {
 	ActionListener listener;
 	Timer timer ;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	 BevelBorder bevel = new BevelBorder(BevelBorder.RAISED);
     
 	QuizScreen(){
 		this.users = d.getUsers();
@@ -47,16 +49,16 @@ public class QuizScreen extends Frame implements KeyListener {
 	    this.add(p1_bar);
          
         p2_bar = new JProgressBar(JProgressBar.VERTICAL, 0, 200);
-	    p2_bar.setBounds((screenSize.width*7)/8 - 80, (screenSize.height *4)/5 - 600, 5, 600);
+	    p2_bar.setBounds((screenSize.width*7)/8 + 80, (screenSize.height *4)/5 - 600, 5, 600);
 	    p2_bar.setValue(0);
 	    this.add(p2_bar);
 	    
 	    p1_labelscore = new JLabel("0");
-	    p1_labelscore.setBounds((screenSize.width*1)/8 -80, (screenSize.height *4)/5 - 200, 100, 40);
+	    p1_labelscore.setBounds((screenSize.width*1)/8 -80, (screenSize.height *8)/9 , 100, 40);
 	    this.add(p1_labelscore);
 	    
 	    p2_labelscore = new JLabel("0");
-	    p2_labelscore.setBounds((screenSize.width*7)/8 -80, (screenSize.height *4)/5 - 200, 100, 40);
+	    p2_labelscore.setBounds((screenSize.width*7)/8 +80, (screenSize.height *8)/9 , 100, 40);
 	    this.add(p2_labelscore);
 	    
 	    p1_name = new JLabel(users[0].getName());
@@ -72,23 +74,39 @@ public class QuizScreen extends Frame implements KeyListener {
 	    this.add(questionLabel);
 	    
 	    option1 = new JButton("");
-	    option1.setBounds((screenSize.width*2)/5, (screenSize.height *3)/5, 100, 40);
+	    option1.setBounds((screenSize.width*1)/5, (screenSize.height *3)/5, 400, 100);
+	    option1.setFont(new java.awt.Font("Lemon/Milk light", Font.BOLD, 16));
+	    option1.setOpaque(true);
+	    option1.setBackground(Color.WHITE);
+	    option1.setForeground(Color.BLUE);
 	    this.add(option1);
 	    
 	    option2 = new JButton("");
-	    option2.setBounds((screenSize.width*3)/5, (screenSize.height *3)/5, 100, 40);
+	    option2.setBounds((screenSize.width*3)/5, (screenSize.height *3)/5, 400, 100);
+	    option2.setFont(new java.awt.Font("Lemon/Milk light", Font.BOLD, 16));
+	    option2.setOpaque(true);
+	    option2.setBackground(Color.WHITE);
+	    option2.setForeground(Color.BLUE);
 	    this.add(option2);
 	    
 	    option3 = new JButton("");
-	    option3.setBounds((screenSize.width*2)/5, (screenSize.height *4)/5, 100, 40);
+	    option3.setBounds((screenSize.width*1)/2 -600, (screenSize.height *4)/5, 400, 100);
+	    option3.setFont(new java.awt.Font("Lemon/Milk light", Font.BOLD, 16));
+	    option3.setOpaque(true);
+	    option3.setBackground(Color.WHITE);
+	    option3.setForeground(Color.BLUE);
 	    this.add(option3);
 	    
 	    option4 = new JButton("");
-	    option4.setBounds((screenSize.width*3)/5, (screenSize.height *4)/5, 100, 40);
+	    option4.setBounds((screenSize.width*1)/2 +200, (screenSize.height *4)/5, 400, 100);
+	    option4.setFont(new java.awt.Font("Lemon/Milk light", Font.BOLD, 16));
+	    option4.setOpaque(true);
+	    option4.setBackground(Color.WHITE);
+	    option4.setForeground(Color.BLUE);
 	    this.add(option4);
 	    
 	    progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, 10);
-     	progressBar.setBounds(100, 100, 900, 5);
+     	progressBar.setBounds(100, 50, (screenSize.width) -200, 30);
      	
      	timer = new Timer(1000, listener);
         
@@ -136,6 +154,7 @@ public class QuizScreen extends Frame implements KeyListener {
 		if(e.getKeyChar() == 'q' || e.getKeyChar() == 'w' || e.getKeyChar() == 'e' || e.getKeyChar() == 'r') {
 			switch(e.getKeyChar()) {
 			case 'q':
+				option1.setBorder(bevel);
 				if(question.getCorrectOption().equals(question.getOption1())) {
 					p1_score = p1_score + counter*multiplier;
 				}
