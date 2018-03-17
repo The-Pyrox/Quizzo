@@ -50,7 +50,7 @@ public class StartScreen extends Frame implements MouseListener{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setSize(screenSize.width,screenSize.height);
 		
-		logo = new JLabel(new ImageIcon("/Users/poojanrathod/Desktop/logo.png"));
+		logo = new JLabel(new ImageIcon("logo.png"));
 		logo.setBounds(screenSize.width/2 - 200 , (screenSize.height * 1)/4 - 150 , 300, 300);
 		this.add(logo);
 		
